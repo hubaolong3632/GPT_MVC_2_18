@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?><!--数据库编写区-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> <!--映射文件和核心文件显示的是不一样的-->
+<mapper namespace="com.chatgpt.idao.ILoginDao">
+
+
+<!--    public Integer update_UserPassowrdLogin(@Param("name")String name,@Param("password")String password,@Param("social_uid")String social_uid);-->
+    <update id="update_UserPassowrdLogin">
+        update   `user`  set name=#{name} ,password=#{password} where social_uid=#{social_uid};
+    </update>  <!--调用映射接口-->
+
+
+    <select id="from_user_social_uid" resultType="com.chatgpt.model.login.LoginFromModel">
+        SELECT social_uid  FROM `user` where social_uid=#{social_uid};
+    </select>
+
+
+
+    <select id="from_user_name" resultType="com.chatgpt.model.login.LoginFromModel">
+        SELECT name  FROM `user` where social_uid=#{social_uid};
+    </select>
+
+<!--    public LoginFromModel from_user_passowr(@Param("name")String name,@Param("password")String password);-->
+    <select id="from_user_passowr" resultType="com.chatgpt.model.login.LoginFromModel">
+        SELECT type,social_uid,nickname,faceimg  FROM `user` where name=#{name} and `password`=#{password};
+    </select>
+</mapper> <!--跟标签-->

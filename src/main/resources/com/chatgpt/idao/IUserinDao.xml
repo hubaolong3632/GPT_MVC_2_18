@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?><!--数据库编写区-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> <!--映射文件和核心文件显示的是不一样的-->
+<mapper namespace="com.chatgpt.idao.IUserDao">
+
+
+    <insert id="insert_user">
+        INSERT INTO `chatgpt`.`user`(type,social_uid,nickname,faceimg,gender) VALUES
+        (#{login.type},#{login.social_uid},#{login.nickname},#{login.faceimg},#{login.gender});
+    </insert>
+
+<!--    /**保存价单到mysql中*/-->
+<!--    public Integer insert_pay(@Param("paydata") PayDataModel paydata) ;-->
+    <insert id="insert_pay">
+        insert into pay(`social_uid`,`order`,`time`,`shopping`,`pice`) values (#{ppp.social_uid},#{ppp.order},#{ppp.time},#{ppp.shopping},#{ppp.pice})
+    </insert>  <!--调用映射接口-->
+<!--    insert into  `chatgpt`.`pay`(`social_uid`,`order`,`time`,`shopping`,`pice`) values (ppp.social_uid,ppp.order,ppp.time,ppp.shopping,ppp.pice)-->
+
+
+    <select id="from_user" resultType="com.chatgpt.model.login.LoginFromModel">
+        SELECT type,social_uid,nickname,faceimg  FROM `user` where social_uid=#{social_uid};
+    </select>
+
+
+</mapper> <!--跟标签-->

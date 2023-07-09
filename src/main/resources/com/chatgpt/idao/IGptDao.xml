@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?><!--数据库编写区-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> <!--映射文件和核心文件显示的是不一样的-->
+<mapper namespace="com.chatgpt.idao.IGptDao">
+
+<!--    public Integer insert_gpt_key(@Param("gpt")GptBalanceModel gpt);-->
+    <insert id="insert_gpt_key">
+        <foreach collection="gptList" item="gpt" separator=";">
+           INSERT INTO `chatgpt`.`gpt_key`( `key`, `balance`, `use`, `sum`, `date`, `start`) VALUES ( #{gpt.key}, #{gpt.balance},  #{gpt.use},  #{gpt.sum},#{gpt.date}, #{gpt.start})
+        </foreach>
+    </insert>
+
+    <!--    public GptBalanceModel update_gpt_key(GptBalanceModel gpt);-->
+    <update id="update_gpt_key">
+            UPDATE `chatgpt`.`gpt_key`
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="gpt.key != null"> `key` = #{gpt.key},</if>
+                <if test="gpt.balance != null"> `balance` = #{gpt.balance},</if>
+                <if test="gpt.use != null"> `use` = #{gpt.use},</if>
+                <if test="gpt.sum != null"> `sum` = #{gpt.sum},</if>
+                <if test="gpt.start != null"> `start` = #{gpt.start},</if>
+            </trim>
+            WHERE `id` = #{gpt.id}
+    </update>
+
+    <update id="update_gpt_keys">
+        <foreach collection="gptList" item="gpt" separator=";">
+            UPDATE `chatgpt`.`gpt_key`
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="gpt.key != null"> `key` = #{gpt.key}</if>
+                <if test="gpt.balance != null">, `balance` = #{gpt.balance}</if>
+                <if test="gpt.use != null">, `use` = #{gpt.use}</if>
+                <if test="gpt.sum != null">, `sum` = #{gpt.sum}</if>
+                <if test="gpt.start != null">, `start` = #{gpt.start}</if>
+            </trim>
+            WHERE `id` = #{gpt.id}
+        </foreach>
+    </update>
+
+
+
+    <!--    public List<GptBalanceModel> from_gpt_keys(GptBalanceModel gpt);-->
+    <select id="from_gpt_keys" resultType="com.chatgpt.model.gpt.mvcGpt.GptBalanceModel">
+        SELECT *
+        FROM `gpt_key`
+        <if test="gpt.start != null and !gpt.start.isEmpty()">
+            WHERE start = #{gpt.start}
+        </if>
+        ORDER BY `date` DESC
+    </select>
+
+
+</mapper> <!--跟标签-->

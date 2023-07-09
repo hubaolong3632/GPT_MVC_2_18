@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>wangEditor代码高亮插件highlight.js</title>
+  <style>
+    pre{
+      background: #F3F3F3;
+      padding: 1px 12px;
+      border-radius: 3px;
+      line-height: 2;
+    }
+  </style>
+  <!-- 引入代码高亮主题 -->
+  <link crossorigin="anonymous" href="https://lib.baomitu.com/highlight.js/10.5.0/styles/rainbow.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- wangEditor富文本编辑器插入代码块生成的html代码 -->
+<h1 id="vqdar">PHP代码高亮测试</h1>
+<pre type="PHP"><code><xmp><?php
+    namespace app\index\controller;
+    class Axis extends \app\common\Blog {
+        //归档详情
+        public function index(){
+            return $this->fetch();
+        }
+    }
+?></xmp></code></pre>
+
+<h1 id="civqo">js代码高亮测试</h1>
+<pre type="JavaScript"><code><xmp><script type="text/javascript">
+    $(function(){
+      var xmp = $('pre code xmp').each(function (i, item) {
+        var pre = $(item).parent().parent();
+        pre.addClass('hljs ' + pre.attr('type'));
+        pre.html(hljs.highlightAuto($(item).html()).value);
+      });
+    });
+</script></xmp></code></pre>
+
+<!-- 引入jquery -->
+<script crossorigin="anonymous" src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
+<!-- 引入highlight.js -->
+<script crossorigin="anonymous" src="https://lib.baomitu.com/highlight.js/10.5.0/highlight.min.js"></script>
+
+<!-- 代码块高亮处理 -->
+<script>
+  //获取所有wangEditor生成的代码块
+  var xmp = $('pre code xmp').each(function (i, item) {
+    //循环遍历获得pre元素
+    var pre = $(item).parent().parent();
+    //添加class 供highlight处理
+    pre.addClass('hljs ' + pre.attr('type'));
+    //利用hljs.highlightAuto函数进行代码高亮处理，并且替换原有html代码
+    pre.html(hljs.highlightAuto($(item).html()).value);
+  });
+</script>
+</body>
+</html>

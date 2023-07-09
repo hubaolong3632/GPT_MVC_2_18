@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>WangEditor代码高亮测试</title>
+</head>
+<body>
+<p>
+    wangEditor 代码高亮
+</p>
+<div id="div1">
+		    <pre type="JavaScript"><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">demo</span><span class="hljs-params">()</span>{</span>
+
+			}</code></pre>
+</div>
+</body>
+</html>
+<script src="https://unpkg.com/wangeditor/dist/wangEditor.min.js"></script>
+<script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+<script type="text/javascript">
+    const E = window.wangEditor;
+    const editor = new E("#div1");
+
+    // 挂载highlight插件
+    editor.highlight = hljs;
+
+    editor.create();
+</script>
