@@ -21,7 +21,6 @@ public interface IGptDao {
     /**查询所有的密钥  或者更具指定条件查询*/
     public List<GptBalanceModel> from_gpt_keys(@Param("gpt")GptBalanceModel gpt);
 
-
     /**插入一条密钥*/
     public Integer insert_gpt_key(@Param("gptList")List<GptBalanceModel> gptList);
 

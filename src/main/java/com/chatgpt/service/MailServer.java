@@ -3,7 +3,6 @@ package com.chatgpt.service;
 import com.chatgpt.model.mail.Leave_mail_model;
 import com.chatgpt.model.mail.MailListModel;
 import com.chatgpt.model.mail.MailMessage_M;
-import com.chatgpt.model.pay.PayDataModel;
 import com.chatgpt.utio.Mail.Mail;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.digest.DigestUtils;

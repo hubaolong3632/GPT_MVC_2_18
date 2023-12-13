@@ -14,12 +14,25 @@
 <!--    public Integer insert_pay(@Param("paydata") PayDataModel paydata) ;-->
     <insert id="insert_pay">
         insert into pay(`social_uid`,`order`,`time`,`shopping`,`pice`) values (#{ppp.social_uid},#{ppp.order},#{ppp.time},#{ppp.shopping},#{ppp.pice})
-    </insert>  <!--调用映射接口-->
+    </insert>
+
+
+    <update id="update_user_uid" >
+        UPDATE gpt_sum SET sum = sum - 1 WHERE uid=#{uid};
+    </update>
+
+    <!--调用映射接口-->
 <!--    insert into  `chatgpt`.`pay`(`social_uid`,`order`,`time`,`shopping`,`pice`) values (ppp.social_uid,ppp.order,ppp.time,ppp.shopping,ppp.pice)-->
 
 
     <select id="from_user" resultType="com.chatgpt.model.login.LoginFromModel">
         SELECT type,social_uid,nickname,faceimg  FROM `user` where social_uid=#{social_uid};
+    </select>
+    <select id="from_user_uid" resultType="com.chatgpt.model.Paid.PaidModel">
+        SELECT gpt_sum.id,gpt_sum.uid,`user`.jurisdiction,gpt_sum.sum FROM `gpt_sum`
+           INNER JOIN  `user` on gpt_sum.uid=`user`.uid
+        where gpt_sum.uid=#{uid}
+
     </select>
 
 

@@ -1,0 +1,779 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>AI伴侣</title>
+    <link rel="icon" href="https://0.00000.work/ai.png" type="image/png">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js">
+    </script><script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--    禁止缓存-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <style>
+
+
+    body {
+        font-family: 'Fang Zheng Kai Ti', cursive;
+        /*font-family: 'Fang Zheng Kai Ti', cursive;*/
+        /*font-family: 'SimSun', cursive;*/
+        /*font-family: 'Cleartype', cursive;*/
+        /*font-family: "隶书";*/
+    }
+    .isDivGPT{
+        font-family: "隶书";
+
+    }
+
+    .yuan:hover {
+        border: 1px solid #efdc83; /* 蓝色边框，可根据需要进行调整 */
+        padding: 10px; /* 内部填充，可根据需要进行调整 */
+        box-shadow: 0 0 10px #b21212; /* 白色阴影，可根据需要进行调整 */
+        padding: 0;
+    }
+
+
+    /*!*设置窗体浮动*!*/
+    .menu-container {
+        top:0px; /* 距离页面顶部50px */
+    }
+
+    .parent-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .custom-p {
+        font-size: 25px;
+        margin-bottom: 20px; /* 调整上下间距 */
+    }
+
+    .container1 {
+        width: 100%;
+    }
+
+    .container1 {
+        /* 默认样式 */
+    }
+    .btn-primary {
+        color: #fff;
+        background-color: #4d5660;
+        border-color: #000000;
+    }
+
+
+
+</style>
+    <style>
+        /*!*当是手机的时候*!*/
+        @media (max-width: 768px) {
+            /*  .yingchang {
+                 display: none;
+             } */
+            #divGPTFather {
+                height: calc(100vh - 200px);
+            }
+        }
+
+        /*当是大于769 电脑的时候*/
+        @media (min-width: 769px) {
+            #divGPTFather {
+                height: calc(100vh - 250px);
+            }
+        }
+
+
+
+
+
+        /*最下面的颜色*/
+        html, body{
+            background-color: #111010;
+            color: white;
+        }
+
+
+        /*中间的颜色*/
+        div,button,textarea{
+            background-color: #111010;
+            color: white;
+
+        }
+
+        /*下面的输入框颜色*/
+        .divis,.divSe{
+            background-color: #111010;
+            color: white;
+        }
+
+        #divGPTFather::-webkit-scrollbar {
+            width: 10px;  /* 设置滚动条的宽度 */
+            background-color: black;  /* 设置滚动条的背景颜色 */
+        }
+
+        #divGPTFather::-webkit-scrollbar-thumb {
+            background-color: gray;  /* 设置滚动条拖动条的颜色 */
+        }
+
+        #divGPTFather::-webkit-scrollbar-thumb:hover {
+            background-color: darkgray;  /* 设置滚动条拖动条的鼠标悬停颜色 */
+        }
+
+    </style>
+
+</head>
+
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+
+
+
+
+
+
+
+<body>
+<!--设置电脑和手机默认都兼容-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<div class="custom-div">
+
+    <div class="parent-container">
+        <div class="van-nav-bar__title van-ellipsis yingchang" style="  cursor: pointer;">
+            <p class="custom-p" onclick="UserModel()">AI伴侣</p>
+        </div>
+        <!--左边  中间   右边   显示三个不同的东西-->
+        <div class="container1" style="display:flex ; justify-content: space-between; padding: 0 80px;">
+            <!-- <div style="display:flex; justify-content: space-between; padding: 0 0px;">
+                <div style="  cursor: pointer;display:flex; flex-direction: column; align-items:center;" onclick="vidCls()">
+                    <img src="https://img1.imgtp.com/2023/08/27/WY6oqJa8.png" style="width:30px; margin-bottom: 10px;">
+                    <p>清屏</p>
+                </div>
+            </div> -->
+            <div style="  cursor: pointer;display:flex; justify-content: space-between; padding: 0 10px;">
+                <div style="display:flex; flex-direction: column; align-items:center;" onclick="zhanting()">
+                    <img src="https://0.00000.work/stop.png" style="border-radius: 80px; width:30px; margin-bottom: 10px;">
+                    <p>停止回答</p>
+                </div>
+            </div>
+            <div style="display:flex; justify-content: space-between; padding: 0 0px;">
+                <div style="  cursor: pointer;display:flex; flex-direction: column; align-items:center;" onclick="UserModel()">
+                    <img src="https://0.00000.work/user.png" style="width:30px; margin-bottom: 10px;">
+                    <p>用户信息</p>
+                </div>
+            </div>
+            <div style="  cursor: pointer;display:flex; justify-content: space-between; padding: 0 0px;">
+                <div style="display:flex; flex-direction: column; align-items:center;" onclick="bhd()">
+                    <img src="https://0.00000.work/icon_reset.png" style="width:30px; margin-bottom: 10px;">
+                    <p>刷新缓存</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="kx container-fluid">
+
+
+
+
+    <!--    height: calc(100vh - 250px);-->
+    <div style="overflow: auto; overflow-y: scroll; overflow-x: hidden;" class="isDivGPT" id="divGPTFather">
+        <!-- 存放问的问题-->
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <textarea class="form-control divSe" id="text_gpt" rows="3" cols="200" placeholder="请输入需要提问的内容 Ctrl+Enter 或者Shift+Enter发送..."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+
+
+            <button type="button" class="btn btn-primary btn-block" onclick="clickOk()" id="buttongpt">提问</button>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="background-color: rgba(0, 0, 0, 0.6);">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="top: 5%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #b68686 ;font-size: 40px     ">×</span></button>
+                <h1 class="modal-title" id="myModalLabel" style="padding-left: 43.5%;">xxx</h1>
+            </div>
+            <div class="modal-body divis" style="text-align: center;">
+                <div id="modelMessage" style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+
+                </div>
+            </div>
+
+            <!--     <p></p>
+                <a href="http://0.00000.work/" style="color: red; font-size: 18px;">白色链接(备用)网站http://0.00000.work/</a>
+                <p>如果出现了一直不回复消息请联系下面QQ会进行修复</p> -->
+            <!-- <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=911412667&amp;site=qq&amp;menu=yes" style="color: red; font-size: 18px;">1. 点此访问QQ:911412667</a> -->
+        </div>
+        <div class="modal-footer"  >
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- 登入功能 -->
+<script type="module">
+    //初始化地方
+    import ajax1 from './ajax.js'
+    let myModalLabel=document.getElementById("myModalLabel"); //头部名称
+    let modelMessage=document.getElementById("modelMessage");  //内容 块
+
+
+   window.registModel=function (){
+        myModalLabel.innerText="注册";
+        modelMessage.innerHTML=`
+            <div class="container" style="width: 80%;">
+                            <div class="form-group">
+                                <label for="username">注册账号:</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="用于登入的账号(不少于5位)">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">注册密码:</label>
+                                <input type="text" class="form-control" id="password" name="password"  placeholder="用户登入的密码(不少于5位)">
+                            </div>
+                               <div class="form-group">
+                                <label for="password">联系方式:</label>
+                                <input type="text" class="form-control" id="qqmail" name="password"   placeholder="用于忘记账号或密码找回时认证本人可以是QQ微信或者手机号">
+                            </div>
+                              <h3 id="message_login" style="color: #b21212;  "></h3>
+                              <div class="modal-footer"></div>
+
+                            <button type="submit" class="btn btn-success" style="padding-right: 10%; margin-right: 12%; "  onclick="regist()">　注册　</button>
+                            <button type="submit" class="btn btn-primary" style="padding-right: 10%; " onclick="loginModel('login')">　返回登入　</button>
+                        </div>
+    `;
+    }
+
+    // registModel();
+
+
+    window.loginModel=function (){
+        myModalLabel.innerText="登入";
+        let name = localStorage.getItem('name');//设置请求key
+        let password = localStorage.getItem('password');//设置请求key
+        if(name==null){
+            name="";
+            password="";
+        }
+
+
+
+        modelMessage.innerHTML=`
+            <div class="container" style="width: 80%;">
+                            <div class="form-group">
+
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=911412667&amp;site=qq&amp;menu=yes" style="color: red; font-size: 18px;">1. 点此联系QQ:911412667</a>
+                           <p>使用前请先注册,如果遇到了问题（忘记账号或密码）或者BUG请联系</p>
+                            <p>正在对接GPT4.0过几天就可以体验到！本软件用户充值的钱都将用于服务器的开发和维护以及新功能升级 各位推广此网站可以找我领次数</p>
+                            <p style="color: yellow">新注册有 5次免费机会，每天免费送10次 </p>
+                                <label for="username">账号:</label>
+                                <input type="text" class="form-control" id="username" name="username" value="${name}">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">密码:</label>
+                                <input type="password" class="form-control" id="password" name="password" value="${password}">
+                            </div>
+                              <h3 id="message_namePassowrd" style="color: #b21212;  "></h3>
+
+                              <div class="modal-footer"></div>
+                            <button type="submit" class="btn btn-success" style="padding-right: 10%; margin-right: 12%;" onclick="login()" >　登录　</button>
+                            <button type="submit" class="btn btn-primary" style="padding-right: 10%; " onclick="registModel()">　注册　</button>
+                        </div>
+    `;
+        _007Server();
+    }
+
+    // 用户信息
+    window.UserModel=async function () {
+        // if(localStorage.getItem('gptkey')==null){
+
+        //     // loginModel();
+
+        //     return;
+        // }
+        let newVar = await ajax1.ajaxPromise("login/fromUser", "post", "", $);
+        if(newVar.code==9090){
+            logOut();//清理数据
+            // await login();//调整到登入界面
+             loginModel();//调整到登入界面
+            return;
+        }
+        console.log(newVar)
+        myModalLabel.innerText = "个人信息";
+        modelMessage.innerHTML = `
+
+          <div style="width: 80%; ">
+
+                        <div>
+
+                        </div>
+                        <div style="display: flex">
+                         <ui style="list-style:none ;text-align: left; width: 100%">
+
+                                 <table border="1" cellspacing="2" style="width: 100%" >
+                                 <tr>
+                                 <td>用户名:</td>
+                                    <td>
+                                   ${newVar.data.name}
+                                    </td>
+                                </tr>
+                                                                 <tr>
+                                 <td>联系方式:</td>
+                                    <td id="qqId">
+                                     ${newVar.data.qq}
+                                    </tdid>
+                                </tr>
+                                                                 <tr>
+                                 <td>剩余次数:</td>
+                                    <td style="color: red; font-size: 18px;">
+                                    &nbsp ${newVar.data.sum}
+                                    </td>
+                                </tr>
+                    </table>
+                            </ui>
+                        </div>
+
+
+                              <div class="modal-footer" style="height: 150px; border: 2px solid white; margin: 20px;display: flex; ">
+                              <div style="text-align: left; border-right: 1px solid white; width: 50%">
+                                <p> 价格： 1.99元</p>
+                                <p>使用次数：100次：</p>
+<!--                                <p>时间：</p>-->
+                                </div>
+<hr>
+                                <div style="display: flex; position: relative;align-items: center; justify-content: center; ">
+                                <button  onclick="gptPay('wxpay')" style="width: 80px;height: 80px"> (微信)立即购买</button>
+                                    <div style="width: 10px;height: 10px;"></div>
+                                <button  onclick="gptPay('alipay')" style="width: 80px;height: 80px"> (支付宝)立即购买</button>
+                                </div>
+                              <div>
+
+
+                          </div>
+
+                            </div>
+
+                            <p>如需要一次性购买千次 请联系管理员QQ:<a href="http://wpa.qq.com/msgrd?v=3&amp;uin=911412667&amp;site=qq&amp;menu=yes" style="color: red; font-size: 18px;">911412667</a></p>
+
+
+                            <button type="submit" class="btn btn-primary" style="padding-right: 10%; background-color: red " onclick="logOut()">退出登入</button>
+                            <button type="submit" class="btn btn-primary" style="padding-right: 10%; background-color: #11ce21 " onclick="href1()">切换白色界面</button>
+
+                            <button type="button"  class="btn btn-primary" class="close" style="padding-right: 10%;" data-dismiss="modal" aria-label="Close" >关闭弹窗</button>
+<!--                            <button type="submit" class="btn btn-primary" style="padding-right: 10%; " onclick="remove_message()">关闭弹窗</button>-->
+                        </div>
+    `;
+        _007Server();
+    }
+    window.href1=function (){
+        window.location.href="indexWhite.html"
+
+    }
+
+    //退出
+    window.logOut=function() {
+        localStorage.setItem('gptkey',"");//退出登入清理 掉 缓存
+        localStorage.setItem('name',"")
+        localStorage.setItem('password',"")
+        loginModel();
+
+    }
+
+     //登入
+     window.login=async function () {
+         let param = {
+             data: {
+                 name: document.getElementById("username").value,
+                 password: document.getElementById("password").value,
+             }
+         }
+         let newVar = await ajax1.ajaxlogin("login/login", "post", param, $);
+         console.log(newVar)
+         if (newVar.code == 1) {
+             localStorage.setItem('gptkey', newVar.data)//设置请求key
+             localStorage.setItem('name',param.data.name)//设置请求key
+             localStorage.setItem('password', param.data.password)//设置请求key
+             UserModel(); //登入完成跳转用户界面
+         }else{
+             document.getElementById("message_namePassowrd").innerText=newVar.data;
+         }
+         // alert("登入功能")
+     }
+
+
+    // 注册
+    window.regist=async function () {
+        if (document.getElementById("username").value.length<5||document.getElementById("username").value.length>50) {
+            document.getElementById("message_login").innerText ="用户名请输入5位以上";
+            return;
+        }else if(document.getElementById("password").value.length<5||document.getElementById("password").value.length>50){
+            document.getElementById("message_login").innerText ="密码请输入5位以上";
+            return;
+        }
+        let param = {
+            data: {
+                name: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                qq: document.getElementById("qqmail").value,
+            }
+        }
+        let newVar = await ajax1.ajaxlogin("login/register", "post", param, $);
+        console.log(newVar)
+        if (newVar.code == 1) {
+            localStorage.setItem('gptkey', newVar.data)//设置请求key
+            localStorage.setItem('name', param.data.name)//设置请求key
+            localStorage.setItem('password', param.data.password)//设置请求key
+            UserModel(); //登入完成跳转用户界面
+        } else {
+            document.getElementById("message_login").innerText = newVar.data;
+            return;
+        }
+
+        // alert("注册功能")
+    }
+    // "alipay"支付
+    window.gptPay=async function (k) {
+        let param = {
+            data: {
+                shopping_pay: k,
+                shopping_id: "50",
+                shopping_sum: "1",
+                shopping_qq: document.getElementById("qqId").innerText,
+            }
+        }
+            let newVar = await ajax1.ajaxPromise("pay/payShopping", "post", param, $);
+            // console.log(newVar)
+        // window.location.href=newVar.data;
+        window.open(newVar.data, '_blank');
+    }
+
+
+    // loginModel(); //登入mo
+
+
+
+
+
+
+
+
+    // 设置显示 界面
+    window._007Server=function (){
+        $("#myModal").modal();
+    }
+
+    // if() 如果已经登入的话
+    _007Server();
+   if(localStorage.getItem('gptkey')==null||localStorage.getItem('gptkey')==""){
+       loginModel();
+   }else{
+       UserModel();
+
+   }
+
+    window.remove_message=function (){
+        // $("#myModal").class
+        document.getElementById("myModal").style.display="none"
+        document.getElementById("myModal").style.display="none"
+
+    }
+
+
+</script>
+
+
+<script>
+
+
+
+
+
+    function  ImgGpt(text){
+        console.log("输出"+text)
+        InterfaceGeneration(text); //显示gpt的回答
+    }
+
+
+    function copyCode(id) { //复制操作
+        let code = document.getElementById(id);
+        console.log(code);
+        let codeText = code.innerText.replace(/\u00A0/g, ' ');
+
+
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(codeText);
+        } else {
+            let textarea = document.createElement('textarea');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = 0;
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    }
+
+
+
+
+    //快捷键操作
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey||e.altKey||e.shiftKey) && e.key ==='Enter') {   // 如果按下了 Ctrl  alt sift  中的一个 键并且带上 Enter 键
+            console.log("点击了按钮");
+            clickOk();             // 在这里执行需要的操作
+        }
+    });
+
+
+
+    function clickOk(){  //点击了确定按钮
+        console.log("点击了按钮");
+        let text = document.getElementById("text_gpt");
+        let textGPT= text.value;
+
+        if(textGPT==null||textGPT.trim()==""){
+            alert("请输入问题");
+            return;
+        }
+        console.log(textGPT)
+        text.value=""; //清理提问
+
+
+        let element = document.getElementById("divGPTFather");
+        // element.scrollTop = element.scrollHeight; //显示到最下面
+        element.scrollTop =0;//显示到最上面
+        InterfaceGeneration(textGPT); //显示gpt的回答
+
+    }
+
+    //放入
+    let contentGPT = document.getElementById("divGPTFather");
+    function InterfaceGeneration(text_gpt){ //界面生成
+        let gpt_id = "gpt"+Math.floor(Math.random() * 90000 + 10000);  //五位随机数
+        let gpt_wt_id =gpt_id+"wt";  //获取提的问题
+        //替换HTML代码段 防止html代码
+        let replaced_text_gpt = text_gpt.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        let xianShi = replaced_text_gpt; //用来显示的复制文件使用
+
+
+
+
+
+        if(replaced_text_gpt.length>100){
+            replaced_text_gpt = replaced_text_gpt.substring(0, 400)+"...";
+        }
+
+        //魔板
+        let  magic=`
+ <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="yuan"  className="col-sm-12 column " name="magicGPT">
+                 <button  style="position: absolute; top: 10px; right: 20px;" onclick="copyCode('${gpt_wt_id}')">复制问题</button>
+                 <button  style="position: absolute; top: 10px; right: 100px;" onclick="copyCode('${gpt_id}')">复制答案</button>
+            <div className="row clearfix">
+                <div className="col-sm-12 column">
+                    <div className="page-header">
+                        <h1>
+                            <small   style="  font-size: 16px">${replaced_text_gpt}</small>
+                            <small  id="${gpt_wt_id}"  style="  font-size: 16px ; display: none;">${xianShi}</small>
+                        </h1>
+                    </div>
+                    <blockquote  name="textGpt" style="  font-size: 18px" id="${gpt_id}">
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+        <br> `;
+
+        console.log("添加了一个标签")
+
+        contentGPT.innerHTML=magic+contentGPT.innerHTML;
+        GPTEventStream(text_gpt,gpt_id);
+    }
+    // let ip=  "https://00000.work:44443";
+    // let ip=  "http://00000.work:19099";
+    let ip=  "https://api.00000.work";
+
+
+    // async  function  jwtsc(){
+    //     if(localStorage.getItem('gptkey')==null){ //如果没有秘钥直接申请秘钥
+    //         $.ajax({
+    //             headers: { // 请求头
+    //                 'Authorization':"null"
+    //             },
+    //             url: ip+"/login/jwt",//请求ip加上请求地址
+    //             type: "get",
+    //             dataType: "json",
+    //             data:'',
+    //             success: function (json) {
+    //                 localStorage.setItem('gptkey',json.data);
+    //             },
+    //         });
+    //         return;
+    //     }
+    //
+    //     //如果有秘钥 那么测试秘钥是否能用
+    //     $.ajax({
+    //         headers: { // 请求头
+    //             'Authorization':localStorage.getItem('gptkey')
+    //         },
+    //
+    //         url: ip+"/login/jwt",//请求ip加上请求地址
+    //         type: "get",
+    //         dataType: "json",
+    //         data:'',
+    //         success: function (json) {
+    //             localStorage.setItem('gptkey',json.data);
+    //         },
+    //     });
+    // }
+    // //
+    // jwtsc();
+
+
+
+    function  zhanting(){  //暂停现在的回答
+        contentGPT.innerHTML=contentGPT.innerHTML;
+    }
+
+    async function GPTEventStream(message, gpt_id) {
+        let innerTextGPT = document.getElementById(gpt_id);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('gptkey')
+            },
+            body: JSON.stringify({
+                message: message,
+            })
+        };
+
+        const fetchPromise = fetch(ip + '/gpt/gptStream', requestOptions); // 创建fetch请求的Promise实例
+
+        const timeoutPromise = new Promise((resolve, reject) => { // 创建超时的Promise实例
+            setTimeout(() => {
+                reject(new Error('请求超时'));
+            }, 10000); // 设置超时时间为10秒
+        });
+
+        const response = await Promise.race([fetchPromise, timeoutPromise]); // 使用Promise.race()并行执行fetch请求和超时的Promise实例
+
+        if (response instanceof Response) { // 如果response是fetch请求的响应对象
+            const reader = response.body.getReader();
+            let result = await reader.read();
+
+            while (!result.done) {
+
+                innerTextGPT.innerText += new TextDecoder("utf-8").decode(result.value).replace(/\s/g,'\u00A0').replace(/{{END}}/g, '\n');
+                result = await reader.read();
+            }
+        } else { // 如果response是超时的错误信息
+            console.error(response.message);
+        }
+        message_add(innerTextGPT.parentNode.parentNode.parentNode.parentNode.parentNode)
+    }
+
+    //保存缓存记录
+    function message_add(text){
+
+        let gptmessage= localStorage.getItem('gptmessage');
+
+        if(gptmessage==null){
+            let message={
+                data:[]
+            }
+            localStorage.setItem('gptmessage',JSON.stringify(message));
+        }else{
+            let message = JSON.parse(gptmessage);
+
+            if(message.data.length>10){ //如果数量大于10就删掉 一个
+                message.data.pop();
+            }
+
+
+            // console.log("值")
+            // console.log(text);
+            let result = text.outerHTML;
+            // console.log("插入")
+            // console.log(result);
+
+
+            // console.log(text)
+            // console.log(JSON.stringify(text))
+            // console.log(text.toString())
+
+            message.data.unshift(result);  //从后 往前 添加
+            localStorage.setItem('gptmessage',JSON.stringify(message));
+        }
+    }
+
+    //查询缓存记录
+    function message_from(){
+        let gptmessage= localStorage.getItem('gptmessage');
+        if(gptmessage!=null){
+            let message=JSON.parse(gptmessage); //拿到 类型值
+            for(let msgHtml of message.data){
+                // console.log(msgHtml)
+                document.getElementById("divGPTFather").innerHTML+=msgHtml+'<br>';
+            }
+        }
+
+    }
+    message_from();
+
+
+
+    function bhd(){
+        InterfaceGeneration("emptyemptyempty"); //清空回答
+    }
+
+    function vidCls(){ //清理div屏幕
+        InterfaceGeneration("emptyemptyempty"); //清空回答
+        document.getElementById("divGPTFather").innerHTML="";
+    }
+
+
+
+
+
+
+</script>
+
+
+
+
+</body>
+<style>
+
+</style>
+
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI伴侣</title>
+    <link rel="icon" href="img/by-1.jpg" type="image/png">
+</head>
+
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+
+<style>
+    /*.my-btn {*/
+    /*    position: absolute;*/
+    /*    top: 20px;*/
+    /*    right: 50px;*/
+    /*    background-color: white; !* 将背景色设为白色 *!*/
+    /*    color: red; !* 将文本颜色设为红色 *!*/
+    /*    font-size: 2px;*/
+    /*    text-align: center;*/
+    /*    border-color: red; !* 将边框颜色设为红色 *!*/
+    /*}*/
+    /*.my-btn:hover {*/
+    /*    background-color: red; !* 鼠标悬停时将背景色设为红色 *!*/
+    /*    color: white; !* 鼠标悬停时将文本颜色设为白色 *!*/
+    /*    border-color: white; !* 鼠标悬停时将边框颜色设为白色 *!*/
+    /*}*/
+
+
+
+    .yuan:hover {
+        border: 1px solid #efdc83; /* 蓝色边框，可根据需要进行调整 */
+        padding: 10px; /* 内部填充，可根据需要进行调整 */
+        box-shadow: 0 0 10px #b21212; /* 白色阴影，可根据需要进行调整 */
+        padding: 0;
+    }
+
+
+    /*!*设置窗体浮动*!*/
+    .menu-container {
+        top:0px; /* 距离页面顶部50px */
+    }
+
+    .parent-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .custom-p {
+        font-size: 25px;
+        margin-bottom: 20px; /* 调整上下间距 */
+    }
+
+    .container1 {
+        width: 100%;
+    }
+
+    .container1 {
+        /* 默认样式 */
+    }
+    .btn-primary {
+        color: #fff;
+        background-color: #4d5660;
+        border-color: #000000;
+    }
+
+
+
+</style>
+
+<body>
+<!--设置电脑和手机默认都兼容-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<div class="custom-div">
+
+    <div class="parent-container" >
+        <div class="van-nav-bar__title van-ellipsis yingchang" style="  cursor: pointer;" >
+            <p class="custom-p" onclick="_007Server()">AI伴侣</p>
+        </div>
+        <!--左边  中间   右边   显示三个不同的东西-->
+        <div   class="container1" style="display:flex ; justify-content: space-between; padding: 0 80px;">
+            <div style="display:flex; justify-content: space-between; padding: 0 0px;" >
+                <div style="  cursor: pointer;display:flex; flex-direction: column; align-items:center;" onclick="vidCls()">
+                    <img src="https://0.00000.work/rgzn.png" style="width:30px; margin-bottom: 10px;">
+                    <p>清屏</p>
+                </div>
+            </div>
+            <div style="  cursor: pointer;display:flex; justify-content: space-between; padding: 0 10px;">
+                <div style="display:flex; flex-direction: column; align-items:center;" onclick="zhanting()">
+                    <img src="https://0.00000.work/rgzn.png" style="width:30px; margin-bottom: 10px;">
+                    <p>停止回答</p>
+                </div>
+            </div>
+            <div style="  cursor: pointer;display:flex; justify-content: space-between; padding: 0 0px;">
+                <div style="display:flex; flex-direction: column; align-items:center;" onclick="bhd()">
+                    <img src="https://0.00000.work/rgzn.png" style="width:30px; margin-bottom: 10px;">
+                    <p>不回答点这</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<div class="kx container-fluid">
+
+
+
+
+    <!--    height: calc(100vh - 250px);-->
+    <div style="overflow: auto; overflow-y: scroll; overflow-x: hidden;background-color:white;" class="isDivGPT" id="divGPTFather">
+        <!-- 存放问的问题-->
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <textarea class="form-control divSe" id="text_gpt" rows="3" cols="200" placeholder="请输入需要提问的内容 Ctrl+Enter 或者Shift+Enter发送..." style="background-color:white;"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+
+            <!--            <div class="col-md-12">-->
+            <!--                <div class="row">-->
+            <!--                    <div class="col-md-6">-->
+            <button type="button" class="btn btn-primary btn-block" onclick="clickOk()" id="buttongpt">提问</button>
+            <!--                    </div>-->
+            <!--                    <div class="col-md-6">-->
+            <!--                        <button type="button" class="btn btn-primary btn-block" onclick="clickOk()" id="buttongpt1">暂停</button>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">告知栏</h4>
+            </div>
+            <div class="modal-body divis" style="text-align: center;">
+                <!--        <a href="https://web.358idc.com/tp5/public/app/haoka/dianpu/more/more.html?uid=17">-->
+                <!--          <img src="https://img1.imgtp.com/2023/08/27/MPLs9rzG.jpg" alt="Cache_5d07b2a5e82d678e_1_.jpg" title="Cache_5d07b2a5e82d678e_1_.jpg" width="540" height="400" class="responsive-img"/>-->
+                <!--        </a>-->
+                <div style="margin-top: 10px;">
+                    <!--          <p style="font-weight: bold; font-size: 18px;">1000M是测速软件的极限，不是流量卡的极限(超速流量卡)</p>-->
+                    <!--          <p>全国广电 - 足量卡现货</p>-->
+                    <!--          <p>不虚量 长期套餐 未成年可办 30天结算 可跨月 可开热点 可换设备</p>-->
+                    <!--          <p>出这一批流量卡，需要的可以联系下面</p>-->
+                    <!--          <p>自己也再用挺好用的，没有什么坑，需要可以具体联系</p>-->
+                    <!--          <p style="font-weight: bold; font-size: 18px;">兄弟们买点支持一下生意,钱都会用来继续开发GPT</p>-->
+                    <!--          <a href="https://web.358idc.com/tp5/public/app/goodsdeis.html?goodsid=2&uid=17" style="color: red; font-size: 18px;">(点此网页购买)选择第二个中国广电</a>-->
+                    <!--          <br>-->
+
+
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p> <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+                    <p>网站正在维护请稍后今天晚上</p>
+
+                    <a href="http://00000.work:9090" style="color: red; font-size: 18px;">黑色链接(备用)网站http://00000.work:9090</a>
+                    <p>如果出现了一直不回复消息请联系下面QQ会进行修复</p>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=911412667&amp;site=qq&amp;menu=yes" style="color: red; font-size: 18px;">1. 点此访问QQ:911412667</a>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<style>
+    /*!*当是手机的时候*!*/
+    @media (max-width: 768px) {
+        .yingchang {
+            display: none;
+        }
+        #divGPTFather {
+            height: calc(100vh - 200px);
+        }
+    }
+
+    /*当是大于769 电脑的时候*/
+    @media (min-width: 769px) {
+        #divGPTFather {
+            height: calc(100vh - 250px);
+        }
+    }
+
+
+
+    body{
+        /*border: 2px solid #fdfdfd;*/
+    }
+
+
+    /*最下面的颜色*/
+    html, body{
+        background-color: white;
+        color: white;
+    }
+
+
+    /*中间的颜色*/
+    div,button,textarea{
+        background-color: white;
+        color: black;
+
+    }
+
+    /*下面的输入框颜色*/
+    .divis,.divSe{
+        background-color: white;
+        color: black;
+    }
+
+    #divGPTFather::-webkit-scrollbar {
+        width: 10px;  /* 设置滚动条的宽度 */
+        background-color: black;  /* 设置滚动条的背景颜色 */
+    }
+
+    #divGPTFather::-webkit-scrollbar-thumb {
+        background-color: gray;  /* 设置滚动条拖动条的颜色 */
+    }
+
+    #divGPTFather::-webkit-scrollbar-thumb:hover {
+        background-color: darkgray;  /* 设置滚动条拖动条的鼠标悬停颜色 */
+    }
+
+</style>
+
+
+<script>
+
+
+    _007Server();
+    function _007Server(){
+        $("#myModal").modal();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // });
+
+
+    <!--    图片的生成-->
+    function  ImgGpt(text){
+        console.log("输出"+text)
+        InterfaceGeneration(text); //显示gpt的回答
+    }
+
+
+    function copyCode(id) { //复制操作
+        let code = document.getElementById(id);
+        console.log(code);
+        let codeText = code.innerText.replace(/\u00A0/g, ' ');
+
+
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(codeText);
+        } else {
+            let textarea = document.createElement('textarea');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = 0;
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    }
+
+
+
+
+    //快捷键操作
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey||e.altKey||e.shiftKey) && e.key ==='Enter') {   // 如果按下了 Ctrl  alt sift  中的一个 键并且带上 Enter 键
+            console.log("点击了按钮");
+            clickOk();             // 在这里执行需要的操作
+        }
+    });
+
+
+
+    function clickOk(){  //点击了确定按钮
+        console.log("点击了按钮");
+        let text = document.getElementById("text_gpt");
+        let textGPT= text.value;
+
+        if(textGPT==null||textGPT.trim()==""){
+            alert("请输入问题");
+            return;
+        }
+        console.log(textGPT)
+        text.value=""; //清理提问
+
+
+        let element = document.getElementById("divGPTFather");
+        // element.scrollTop = element.scrollHeight; //显示到最下面
+        element.scrollTop =0;//显示到最上面
+        InterfaceGeneration(textGPT); //显示gpt的回答
+
+    }
+
+    //放入
+    let contentGPT = document.getElementById("divGPTFather");
+    function InterfaceGeneration(text_gpt){ //界面生成
+        let gpt_id = "gpt"+Math.floor(Math.random() * 90000 + 10000);  //五位随机数
+        let gpt_wt_id =gpt_id+"wt";  //获取提的问题
+        //替换HTML代码段 防止html代码
+        let replaced_text_gpt = text_gpt.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        let xianShi = replaced_text_gpt; //用来显示的复制文件使用
+
+
+
+
+        if(replaced_text_gpt.length>100){
+            replaced_text_gpt = replaced_text_gpt.substring(0, 200)+"...";
+        }
+
+        //魔板
+        let  magic=`
+ <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="yuan"  className="col-sm-12 column " name="magicGPT">
+                 <button  style="position: absolute; top: 10px; right: 20px;" onclick="copyCode('${gpt_wt_id}')">复制问题</button>
+                 <button  style="position: absolute; top: 10px; right: 100px;" onclick="copyCode('${gpt_id}')">复制答案</button>
+            <div className="row clearfix">
+                <div className="col-sm-12 column">
+                    <div className="page-header">
+                        <h1>
+                            <small   style="  font-size: 16px">${replaced_text_gpt}</small>
+                            <small  id="${gpt_wt_id}"  style="  font-size: 16px ; display: none;">${xianShi}</small>
+                        </h1>
+                    </div>
+                    <blockquote  name="textGpt" style="  font-size: 18px" id="${gpt_id}">
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+        <br> `;
+
+        console.log("添加了一个标签")
+
+        contentGPT.innerHTML=magic+contentGPT.innerHTML;
+        GPTEventStream(text_gpt,gpt_id);
+    }
+    let ip=  "https://00000.work:44443";
+    // let ip=  "https://api.00000.work";
+
+    async  function  jwtsc(){
+        // alert("执行查询")
+        if(localStorage.getItem('gptkey')==null){ //如果没有秘钥直接申请秘钥
+            $.ajax({
+                headers: { // 请求头
+                    'Authorization':"null"
+                },
+                url: ip+"/login/jwt",//请求ip加上请求地址
+                type: "get",
+                dataType: "json",
+                data:'',
+                success: function (json) {
+                    console.log(json.data)
+                    localStorage.setItem('gptkey',json.data);
+                },
+            });
+            return;
+        }
+
+        //如果有秘钥 那么测试秘钥是否能用
+        $.ajax({
+            headers: { // 请求头
+                'Authorization':localStorage.getItem('gptkey')
+            },
+
+            url: ip+"/login/jwt",//请求ip加上请求地址
+            type: "get",
+            dataType: "json",
+            data:'',
+            success: function (json) {
+                console.log(json.data)
+
+                localStorage.setItem('gptkey',json.data);
+            },
+        });
+    }
+    //
+    jwtsc();
+    // //密钥查询
+    // if(localStorage.getItem('gptkey')==null){ //如果密钥为空
+    //     //这里应该有一个判断密钥是否过期,如果过期了那么得重新加载一个密钥
+    //     // localStorage.setItem('gptkey',"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJbJcSAxIDikIfDnV3vt7xsZW5ndGjvt7xzZWxlY3QiLCJleHAiOjE2ODkwNTc4MTIsImlzcyI6IlNLLTAwMDAwLndvcmsiLCJqd3Rtb2RlbCI6IntcInNvY2lhbF91aWRcIjpcIjk5MzU2ODBFQUM5RDczQzQ0RDY1RDBDMzkyRDk3MzEwXCIsXCJ0eXBlXCI6XCJxcVwifSJ9.RPun_LSQV-jZjIIkJzTXYGHEjse9rGBWOx72sC2giEQ1yDVh_B1loaKdfcdRQgIhPCKHJc8oN38-6y-ptEimjQ");
+    //     jwtsc();
+    // }else{
+    //     // jwtsc();
+    //     // localStorage.setItem('gptkey',"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJbJcSAxIDikIfDnV3vt7xsZW5ndGjvt7xzZWxlY3QiLCJleHAiOjE2ODkwNTc4MTIsImlzcyI6IlNLLTAwMDAwLndvcmsiLCJqd3Rtb2RlbCI6IntcInNvY2lhbF91aWRcIjpcIjk5MzU2ODBFQUM5RDczQzQ0RDY1RDBDMzkyRDk3MzEwXCIsXCJ0eXBlXCI6XCJxcVwifSJ9.RPun_LSQV-jZjIIkJzTXYGHEjse9rGBWOx72sC2giEQ1yDVh_B1loaKdfcdRQgIhPCKHJc8oN38-6y-ptEimjQ");
+    // }
+
+
+
+
+    function  zhanting(){  //暂停现在的回答
+        contentGPT.innerHTML=contentGPT.innerHTML;
+    }
+
+    async function GPTEventStream(message, gpt_id) {
+        let innerTextGPT = document.getElementById(gpt_id);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('gptkey')
+            },
+            body: JSON.stringify({
+                message: message,
+            })
+        };
+
+        const fetchPromise = fetch(ip + '/gpt/gptStream', requestOptions); // 创建fetch请求的Promise实例
+
+        const timeoutPromise = new Promise((resolve, reject) => { // 创建超时的Promise实例
+            setTimeout(() => {
+                reject(new Error('请求超时'));
+            }, 10000); // 设置超时时间为10秒
+        });
+
+        const response = await Promise.race([fetchPromise, timeoutPromise]); // 使用Promise.race()并行执行fetch请求和超时的Promise实例
+
+        if (response instanceof Response) { // 如果response是fetch请求的响应对象
+            const reader = response.body.getReader();
+            let result = await reader.read();
+
+            while (!result.done) {
+                // innerTextGPT.innerText += new TextDecoder("utf-8").decode(result.value).replaceAll(" ",'\u00A0').replaceAll("{{END}}", "\n");
+                innerTextGPT.innerText += new TextDecoder("utf-8").decode(result.value).replace(/\s/g,'\u00A0').replace(/{{END}}/g, '\n');
+
+                result = await reader.read();
+            }
+        } else { // 如果response是超时的错误信息
+            console.error(response.message);
+        }
+    }
+
+    // async function GPTEventStream(message, gpt_id) { // 声明一个异步函数GPTEventStream，接收两个参数：消息和gpt_id
+    //     let innerTextGPT = document.getElementById(gpt_id);// 获取gpt_id对应的DOM元素
+    //     const requestOptions = {// 定义请求选项
+    //         method: 'POST', // 请求方法为POST
+    //         headers: { // 请求头
+    //             'Content-Type': 'application/json', // 请求类型为JSON
+    //             // 'Content-Type': 'text/plain',   //请求体为文本类型
+    //             // 'Authorization':'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJRREIiLCJleHAiOjE2ODgyNzY3NjAsImlzcyI6IlNLLTAwMDAwLndvcmsiLCJqd3Rtb2RlbCI6IntcInNvY2lhbF91aWRcIjpcIm9Oa2pYNkhXN1hoZkZRNW5KbGt3TlRrY0tGekVcIixcInR5cGVcIjpcInd4XCJ9In0.lEdP2rW08vEQ_16NTRAWw9ECbKWfUJszcHwdbOaqCJUp1xdUf8pJtwACZ7lkvZEFtSo0ZVfkjTSTzOpx8Q7pvw'
+    //             'Authorization':localStorage.getItem('gptkey')
+    //         },
+    //         body:JSON.stringify({ // 请求体，将message转换为JSON字符串
+    //             message: message,
+    //         })
+    //
+    //     };
+    //
+    //
+    //         const response = await fetch(ip+`/gpt/gptStream`, requestOptions); // 发送Fetch请求，参数为'/index'和请求选项
+    //         const reader = response.body.getReader(); // 获取响应体的读取器
+    //         let result = await reader.read(); //读取响应体
+    //
+    //
+    //
+    //         while (!result.done) {  // 当响应体未读取完时，将响应体的值添加到innerTextGPT中
+    //             innerTextGPT.innerText += new TextDecoder("utf-8").decode(result.value).replaceAll(" ",'\u00A0').replaceAll("{{END}}", "\n");
+    //
+    //
+    //
+    //             result = await reader.read();
+    //         }
+    //         console.error('服务器消息发送完毕!'); // 输出消息
+    //
+    //
+    //
+    //     try {
+    //     } catch (error) {
+    //         console.error('Fetch请求出现错误:', error);// 输出错误信息
+    //     }
+    // }
+
+    function bhd(){
+        InterfaceGeneration("emptyemptyempty"); //清空回答
+    }
+
+    function vidCls(){ //清理div屏幕
+        InterfaceGeneration("emptyemptyempty"); //清空回答
+        document.getElementById("divGPTFather").innerHTML="";
+    }
+
+
+
+
+
+
+</script>
+
+<style>
+    @media (max-width: 768px) {
+        .responsive-img {
+            max-width: 50%;
+            height: auto;
+        }
+    }
+
+</style>
+</html>

@@ -4,8 +4,6 @@ import com.chatgpt.idao.IUserDao;
 import com.chatgpt.model.gpt.mvcGpt.GptNumberModel;
 import com.chatgpt.model.gpt.webGpt.G2_SonModel;
 import com.chatgpt.model.login.LoginFromModel;
-import com.chatgpt.model.pay.PayDataModel;
-import com.chatgpt.model.pay.PayOrderModel;
 import com.chatgpt.utio.UtioY;
 import com.chatgpt.utio.model.JWTDatasModel;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,19 +46,6 @@ public class RedisService {
        // 获取Hash操作对象
        HashOperations<String, String, Object> hashOperations = template.opsForHash();
 
-       // 判断是否存在当前值
-//       boolean exists = hashOperations.hasKey(ipNumber, "sum"); // 判断sum字段是否存在
-//       if (exists) {
-//           System.out.println("存在当前键");
-//           // 存在当前值，自增sum属性
-//           hashOperations.increment(ipNumber, "sum", 1);
-//       } else {
-//           System.out.println("不存在当前键");
-//           // 不存在当前值，创建map并设置sum属性为1
-//           hashOperations.put(ipNumber, "sum", 1);
-//       }
-//        hashOperations.increment(ipNumber, userKeyNumber, 1); //将用户放进哈希表并且自增1
-//        template.opsForValue().increment(userKeyNumber, 1); //返回当前用户的操作次数
             return true;
 
         }catch (Exception e){
@@ -161,6 +146,7 @@ public class RedisService {
 
     /**查找对象的参数*/
     public List<G2_SonModel> getUserMessageList(String social_uid){
+        System.out.println(" 查找的reids参数social_uid:"+social_uid);
         String gptMessageKey = "gptMessage:" + social_uid;
 
         List<Object> range =template.opsForList().range(gptMessageKey ,0, -1); //查找当前用户的所有信息
@@ -194,73 +180,6 @@ public class RedisService {
         template.expire(key, 10, TimeUnit.SECONDS);  //10秒过期
     }
 
-
-
-//    保存订单号+支付的ip
-    public Boolean setPayOutTradeNo(PayDataModel pay,String jwt){
-        try{
-
-            String social_uid = UtioY.JWT_PAnalysis(jwt).getJwtmodel().getSocial_uid(); //拿到用户
-
-            String out_trade_no = "out_trade_no:" + pay.getOut_trade_no();
-            System.out.println("创建订单号Redis成功用户："+social_uid+"       订单号："+out_trade_no);
-            template.opsForHash().put(out_trade_no,"social_uid",social_uid); //保存订单号和对应的付款人
-            template.opsForHash().put(out_trade_no,"money",pay.getMoney()); //保存支付金额
-            template.opsForHash().put(out_trade_no,"name",pay.getName()); //保存支付的商品名称
-            template.expire(out_trade_no, 10, TimeUnit.MINUTES);//订单号10分钟过期  防止redis炸掉
-
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    //   通过订单号查询
-    public Boolean getPayOutTradeNo(String out_trade_no_user){
-
-
-//        拿到订单号
-         String   out_trade_no= "out_trade_no:"+out_trade_no_user;
-         PayOrderModel paydata = new PayOrderModel();
-        try{
-            System.out.println("|支付测试》》3       订单号："+out_trade_no);
-
-            //判断订单号是否存在 然后保存数据库
-            System.out.println("支付订单号"+out_trade_no);
-            if (template.hasKey(out_trade_no)){
-                paydata.setSocial_uid((String) template.opsForHash().get(out_trade_no,"social_uid"));//付款码
-                paydata.setPice((String)template.opsForHash().get(out_trade_no, "money"));//保存支付金额
-                paydata.setShopping((String)template.opsForHash().get(out_trade_no, "name"));//保存支付的商品名称
-                paydata.setTime(UtioY.Date_getDate());//下单时间
-                paydata.setOrder(out_trade_no_user); //订单号
-
-                System.out.println("|支付测试》》1");
-
-                System.out.println("\n\n");
-                System.out.println(paydata);
-                System.out.println("唯一付款码"+paydata.getSocial_uid());
-
-
-    //           拿到了订单号等等 现在进行保存到数据库
-                Integer integer = userDao.insert_pay(paydata);//支付完成保存数据
-                System.out.println(integer);
-                System.out.println("|支付测试》》2");
-
-
-
-                return true;
-            }else{
-                return false; //如果不存在在redis中那么是恶意测试（或者redis炸了）
-            }
-
-        }catch (Exception e){
-            System.out.println("|支付测试》》4");
-
-            e.printStackTrace();
-             return null;
-        }
-    }
 
 
     //    添加用户的各种参数     用来查询用户的值   不需要 String jwt ,
@@ -298,8 +217,6 @@ public class RedisService {
                 login.setSocial_uid( (String) template.opsForHash().get(social_uid,"social_uid")); //永久保存的登入码
                 login.setNickname(   (String) template.opsForHash().get(social_uid,"Nickname")); //姓名
                 login.setFaceimg(    (String)template.opsForHash().get(social_uid,"faceimg")); //头像
-//                login.setIp(         (String) template.opsForHash().get(social_uid,"ip")); //ip地址
-
 
 
 

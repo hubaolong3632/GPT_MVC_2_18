@@ -12,6 +12,7 @@ import lombok.Data;
 public class JWTModel {
    private String type; //登入方式
    private String social_uid; //永久保存的值
+    private String uid;
 
     public JWTModel() {
     }

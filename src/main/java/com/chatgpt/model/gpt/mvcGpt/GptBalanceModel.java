@@ -2,6 +2,8 @@ package com.chatgpt.model.gpt.mvcGpt;
 
 //import lombok.Data;
 
+import java.util.Objects;
+
 //获取余下的
 //@Data
 public class GptBalanceModel {
@@ -14,6 +16,10 @@ public class GptBalanceModel {
     private String date; //放入时间
     private String key;//秘钥
     private String start;//状态
+
+
+    public Integer key_id=0;
+    public Integer key_id_sum=0;
 
 
     public GptBalanceModel() {
@@ -33,6 +39,8 @@ public class GptBalanceModel {
                 ", date='" + date + '\'' +
                 ", key='" + key + '\'' +
                 ", start='" + start + '\'' +
+                ", key_id=" + key_id +
+                ", key_id_sum=" + key_id_sum +
                 '}';
     }
 
@@ -96,5 +104,18 @@ public class GptBalanceModel {
 
     public void setStart(String start) {
         this.start = start;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GptBalanceModel that = (GptBalanceModel) o;
+        return key.equals(that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key);
     }
 }

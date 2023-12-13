@@ -1,12 +1,20 @@
 package com.chatgpt.z_ljx;
 
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.chatgpt.config.RootConfig;
 import com.chatgpt.idao.IGptDao;
+import com.chatgpt.model.gpt.mvcGpt.GPTConfigurationModel;
 import com.chatgpt.model.gpt.mvcGpt.GptBalanceModel;
+import com.chatgpt.model.gpt.mvcGpt.GptStaticModel;
 import com.chatgpt.model.gpt.webGpt.G2_SonModel;
+import com.chatgpt.model.gpt.webGpt.GPT_2测试Model;
+import com.chatgpt.model.gpt.webGpt.GptUser;
 import com.chatgpt.service.GptService;
 import com.chatgpt.service.RedisService;
+import com.chatgpt.utio.UtioClass.DateUtio;
+import com.chatgpt.utio.UtioClass.IP;
+import com.chatgpt.utio.UtioClass.JS;
 import com.chatgpt.utio.UtioY;
 import com.chatgpt.utio.model.IPRessModel;
 import lombok.SneakyThrows;
@@ -21,15 +29,322 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component("mainText") //和bean区别是一个作用与类一个是作用于方法
 public class MainText {
+
+
+    private static final long serialVersionUID = 1L;
+
+    private   static   List<String> list = new ArrayList<>(); // 待优化：使用List更好地管理API密钥
+    private   static   List<String> ip_no = new ArrayList<>(); // 用于记录用户黑名单
+    private static   int sum_key = 0; // key 的交换
+    public   static  Map<String, GptUser> mapUser=new HashMap<>(); //保存用户访问信息
+
+    public  static   long USER_sum_visit=0; // 记录用户访问数量
+    public  static  long API_sum_visit=0; // 记录今日访问量
+
+    public static Map<String,Integer> IPSumMap=new HashMap<>(); //统计各个ip 访问次数
+
+//    private  static  Map<String, GptUser> mapUser=new HashMap<>(); //保存用户访问信息
+
+    public static List<String> listURL=new ArrayList<>();
+//    public static int sum_URL=0; //统计URL的
+
+@Test
+    protected void doPost() throws ServletException, IOException {
+
+    while (true) {
+        try {
+
+            List<G2_SonModel> listGPT = null;
+
+
+            int sum_sum_sum = 0;
+            String userName = "zs";
+            String message = "你好";
+
+            System.out.println("\n-----------------------------------------------------");
+            if (
+                    mapUser.containsKey(userName)) { //存在的时候
+                System.out.println("|001>>:存在用户");
+                listGPT = mapUser.get(userName).getMessage(); //获取集合
+                System.out.println("|003>>:访问数量:" + (listGPT.size() + 1)); //加1因为从0开始
+
+                if (listGPT.size() > 10) { //连续模式下最多10条
+                    mapUser.get(userName).setMessage(new ArrayList<>()); //重新创建一个如果超过15条
+                    System.out.println("|111>>:超过10条已经重新开始");
+                }
+                listGPT.add(new G2_SonModel("user", message));
+
+            } else {
+                System.out.println("|002>>:新用户访问");
+                //创建消息集合
+                listGPT = new ArrayList<>();
+                listGPT.add(new G2_SonModel("user", message));
+                GptUser gptUser = new GptUser(listGPT);
+                mapUser.put(userName, gptUser);// 以名字带对象的方法使用
+
+                USER_sum_visit++; //今日访问人数
+            }
+            System.out.println("msg:" + message);
+            API_sum_visit++; //今日访问量
+
+            System.out.println("|--今日访问人数:" + USER_sum_visit + "   今日访问数量:" + API_sum_visit + "--|");
+
+
+            while (true) {
+                try {
+//                            GPT_2测试Model g2 = new GPT_2测试Model("gpt-3.5-turbo", listGPT, 0.9, true);
+                    GPT_2测试Model g2 = new GPT_2测试Model("gpt-3.5-turbo-16k", listGPT, 0.9, true);
+//                            GPT_2测试Model g2 = new GPT_2测试Model("gpt-3.5-turbo-0613", listGPT, 0.9, true);
+                    String json = JS.JSONNoDate(g2); //输出测试用例 并且不带时间
+
+                    System.out.println(json);
+                    byte[] postData = json.getBytes("UTF-8");
+                    String url = "https://openai.1rmb.tk" + "/v1/chat/completions"; //生成请求链接
+
+
+                    URL serverUrl = new URL(url);
+                    HttpsURLConnection conn = (HttpsURLConnection) serverUrl.openConnection();
+                    conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type", "application/json");
+
+
+                    //进行连接GPT官网
+//                    System.out.println("第:"+sum_key % list.size()+"     |007>> 使用的秘钥是:"+list.get(sum_key % list.size()));
+
+                    String sum_URL = retrunKey().getKey();
+
+//                    conn.setRequestProperty("Authorization", "Bearer " + list.get(sum_key % list.size()) + "");
+                    conn.setRequestProperty("Authorization", "Bearer " + sum_URL + "");
+//                    sum_key++;
+                    conn.setRequestProperty("Connection", "Keep-Alive"); //持续连接
+                    conn.setConnectTimeout(200000); //时长
+                    OutputStream wr = conn.getOutputStream();
+                    wr.write(postData);
+                    wr.flush();
+
+
+                    //收到的数据发送给前端
+                    InputStream is = conn.getInputStream();
+                    System.out.println("执行输出1");
+
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                    String output;
+                    System.out.println("执行输出2");
+
+                    while ((output = br.readLine()) != null) {
+//                        System.out.println("执行输出");
+
+                        try {
+                            JSONObject js = new JSONObject().parseObject(output.replace("data: ", ""));
+                            if (js != null) {
+//                                System.out.println(js);
+//                                String text = js.getJSONArray("choices").getJSONObject(0).getJSONObject("delta").getString("content").replaceAll("\n", "{{END}}");
+                                String text = js.getJSONArray("choices").getJSONObject(0).getJSONObject("delta").getString("content").replaceAll("\n", "{{END}}");
+                                if (text != null) {
+                                    System.out.println("输出");
+//                                    System.out.print(text);
+                                }
+                            }
+//
+                        } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                    System.out.println("|>>json异常");
+                        } catch (Exception e) {  //可能会出现解析的时候一点点事故（间隔发送的）但是没关系咱不管他
+//                            System.out.println("发生错误");
+//                            e.printStackTrace();
+//                            System.out.println("|>>>程序出现异常|-yc001:>>:"+e.getMessage());
+
+                        }
+                    }
+
+
+                    System.out.println("|100---->《发送成功》");
+
+                    break;
+                } catch (Exception e) {  //出现其他问题
+
+//                      如果失误5次就停止
+                    sum_sum_sum++;
+                    if (sum_sum_sum == 5) {
+                        System.out.println("终止");
+                        return;
+                    }
+                    System.out.println("次数加1" + sum_sum_sum);
+
+                    System.out.println("|>>>程序出现异常|-yc002:>>:" + e.getMessage());
+
+                    e.printStackTrace();
+                }
+            }
+
+
+        } catch (Exception e) { //连接的时候突然客户端关闭
+            System.out.println("|>>>程序出现异常|-yc003:>>:" + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+    }
+}
+
+
+
+
+    static {
+        List<GptBalanceModel> balanceList = GptStaticModel.getList;
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        balanceList.add(new GptBalanceModel("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"));
+        GptStaticModel.keySum=balanceList.size();
+    }
+
+
+    /**返回一个密钥用于操作  密钥轮换*/
+    public GptBalanceModel retrunKey(){
+
+        int keyPresent = GptStaticModel.keyPresent;
+        int keySum = GptStaticModel.keySum;
+
+        if(keyPresent==0){
+            System.out.println("密钥数量为0个请注意密钥！！");
+            return null;
+        }
+        int keyLong=keyPresent%keySum;//计算出当前是第多少个
+//        System.out.println("第:"+keyLong+"个密钥");
+
+        GptStaticModel.keyPresent++;
+
+        return GptStaticModel.getList.get(keyLong); //拿到第n个密钥
+    }
+
+
+
+    @Test
+    public void CheshiGPT(){
+        MainText main=new MainText();
+        GPTConfigurationModel gptConfig=new GPTConfigurationModel(); //拿到配置模型
+
+        gptConfig.setStream(true);
+        gptConfig.setTemperature(0.9);
+        gptConfig.setModel("gpt-3.5-turbo-0613");
+
+
+
+        List<G2_SonModel> messages=new ArrayList<>();
+        messages.add(new G2_SonModel("user", "你好"));
+        gptConfig.setMessages(messages);
+     String   json = JS.JSONNoDate(gptConfig); //输出测试用例 并且不带时间
+int k=0;
+        while(true){
+            System.out.println("传输过去的数据:");
+            System.out.println(json);
+            main.abc(json);
+
+            System.out.println("当前执行次数="+(++k));
+
+        }
+    }
+    public void abc(String   json){
+        try {
+            byte[] postData = json.getBytes("UTF-8");
+
+            String url = "https://openai.1rmb.tk" + "/v1/chat/completions"; //生成请求链接
+//            String url = "https://api.openai.com" + "/v1/chat/completions"; //生成请求链接
+
+            URL serverUrl = new URL(url);
+            HttpsURLConnection conn = (HttpsURLConnection) serverUrl.openConnection();
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");//模拟用户请求
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            conn.setRequestProperty("Content-Type", "application/json");
+
+
+            String key = retrunKey().getKey();
+            System.out.println("使用的密钥为:" + key);
+            conn.setRequestProperty("Authorization", "Bearer " + key);
+
+            conn.setRequestProperty("Connection", "Keep-Alive"); //持续连接
+
+
+            conn.setConnectTimeout(2000); //时长
+            OutputStream wr = conn.getOutputStream();
+            wr.write(postData);
+            wr.flush();
+            System.out.println("连接gpt服务器成功");
+
+
+
+            //收到的数据发送给前端
+            InputStream is = conn.getInputStream();
+            System.out.println("设置流请求成功");
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            System.out.println("设置传输编码格式成功");
+//            StringBuilder sb = new StringBuilder(); //用来最后放入gpt回答的答案
+
+
+
+            String output;
+            while ((output = br.readLine()) != null) {
+//                System.out.println(output);
+//                System.out.println("输出");
+                try {
+                    JSONObject js = new JSONObject().parseObject(output.replace("data: ", ""));
+//                    System.out.println(js);
+                    if (js != null) {
+                        String text = js.getJSONArray("choices").getJSONObject(0).getJSONObject("delta").getString("content");
+//                        String text = js.getString("content");
+                        System.out.println(js);
+
+                    }
+                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+                    System.out.println("结束1");
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    System.out.println("结束2");
+
+                } catch (Exception e) {  //可能会出现解析的时候一点点事故（间隔发送的）但是没关系咱不管他
+                    System.out.println("发生错误");
+                    e.printStackTrace();
+                    System.out.println("|>>>程序出现异常|-yc001:>>:" + e.getMessage());
+
+                }
+            }
+
+
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     @Test
@@ -144,21 +459,21 @@ public class MainText {
         ApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
         MainText main = (MainText) context.getBean("mainText");
         GptService gptService = main.gptService1;
-        List<GptBalanceModel> gptBalanceModels = gptService.insert_gpt_key("账号08dqzcjt1f1qavoamg@aaas8.icu密码VA0NwWqNK邮箱密码Asd123456写代码用的：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\n" +
-                "账号cqpjs108rcwjum3qow@aaas8.icu密码AOAYfF2CO邮箱密码Asd123456写代码用的：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\n" +
-                "账号siy0ddwgppnuw9jytb@aaas8.icu密码kMU7DdCyL邮箱密码Asd123456写代码用的：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\n" +
-                "账号hm0a30oyysopadye75@topmail.icu密码tW1jKKXtV邮箱密码Asd123456写代码用的：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\n" +
-                "账号xsjfzu5y877hz8faa1@aaas8.icu密码mrrNVyun7邮箱密码Asd123456写代码用的：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\n" +
-                "账号cq90czxna0lkegomdg@paaas.icu密码zBJ9RehiV邮箱密码Asd123456写代码用的：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\n" +
-                "账号vxirpfa17b94ft7tq8@aaas8.icu密码a5IJdvvgo邮箱密码Asd123456写代码用的：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\n" +
-                "账号ddhl34zu8jnh4zvg89@pophotmail.icu密码DL9zWsGbZ邮箱密码Asd123456写代码用的：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\n" +
-                "账号tov2s0bg822rzqc4yw@paaas.icu密码qceqhdVqw邮箱密码Asd123456写代码用的：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\n" +
-                "账号qz2z566bdj4562qyj8@topmail.icu密码jDaGvrNf3邮箱密码Asd123456写代码用的：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");
-
+//        List<GptBalanceModel> gptBalanceModels = gptService.insert_gpt_key("账号08dqzcjt1f1qavoamg@aaas8.icu密码VA0NwWqNK邮箱密码Asd123456写代码用的：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\n" +
+//                "账号cqpjs108rcwjum3qow@aaas8.icu密码AOAYfF2CO邮箱密码Asd123456写代码用的：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\n" +
+//                "账号siy0ddwgppnuw9jytb@aaas8.icu密码kMU7DdCyL邮箱密码Asd123456写代码用的：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\n" +
+//                "账号hm0a30oyysopadye75@topmail.icu密码tW1jKKXtV邮箱密码Asd123456写代码用的：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\n" +
+//                "账号xsjfzu5y877hz8faa1@aaas8.icu密码mrrNVyun7邮箱密码Asd123456写代码用的：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\n" +
+//                "账号cq90czxna0lkegomdg@paaas.icu密码zBJ9RehiV邮箱密码Asd123456写代码用的：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\n" +
+//                "账号vxirpfa17b94ft7tq8@aaas8.icu密码a5IJdvvgo邮箱密码Asd123456写代码用的：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\n" +
+//                "账号ddhl34zu8jnh4zvg89@pophotmail.icu密码DL9zWsGbZ邮箱密码Asd123456写代码用的：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\n" +
+//                "账号tov2s0bg822rzqc4yw@paaas.icu密码qceqhdVqw邮箱密码Asd123456写代码用的：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\n" +
+//                "账号qz2z566bdj4562qyj8@topmail.icu密码jDaGvrNf3邮箱密码Asd123456写代码用的：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");
+//
 
 //        List<GptBalanceModel> gptBalanceModels = gptService.insert_gpt_key("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  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");
 
-        System.out.println(gptBalanceModels);
+//        System.out.println(gptBalanceModels);
 
     }
 
